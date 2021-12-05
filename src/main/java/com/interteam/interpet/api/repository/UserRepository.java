@@ -1,21 +1,15 @@
 package com.interteam.interpet.api.repository;
 
-import com.interteam.interpet.api.config.Encoder;
-import com.interteam.interpet.api.model.MUser;
+import com.interteam.interpet.api.controller.user.UserDto;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public class UserRepository {
-    public MUser find(String email) {
-        //TODO database connection
+@Repository
+public interface UserRepository extends CrudRepository<UserDto, Integer> {
+    @Query("SELECT t FROM Thing t WHERE t.fooIn = ?1 AND t.bar = ?2")
+    static UserDto find(String email) //todo
+    {
         return null;
-    }
-
-    public String getPassword(String email) {
-        //TODO database connection
-        return "";
-    }
-
-    public void register(String email, String password, String name, String surname, String city) {
-        String hash = new Encoder().encode(password);
-        //TODO database connection
     }
 }

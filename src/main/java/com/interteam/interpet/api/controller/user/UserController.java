@@ -17,7 +17,7 @@ class UserController {
     }
 
     @PatchMapping("/{userId}")
-    ResponseEntity<Void> addOffer(@RequestBody UserDto userDto) {
+    ResponseEntity<Void> editUser(@RequestBody UserDto userDto) {
         return ResponseEntity.badRequest()
                 .build();
     }
