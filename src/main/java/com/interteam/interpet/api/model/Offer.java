@@ -1,6 +1,6 @@
 package com.interteam.interpet.api.model;
 
-public class MOffer {
+public class Offer {
     private String id;
     private String userId;
     private String animal;
@@ -9,7 +9,7 @@ public class MOffer {
     private String end;
     private String text;
 
-    public MOffer(String id, String userId, String animal, float price, String start, String end, String text) {
+    public Offer(String id, String userId, String animal, float price, String start, String end, String text) {
         this.id = id;
         this.userId = userId;
         this.animal = animal;
