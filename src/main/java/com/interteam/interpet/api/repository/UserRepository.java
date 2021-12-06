@@ -1,15 +1,21 @@
 package com.interteam.interpet.api.repository;
 
-import com.interteam.interpet.api.controller.user.UserDto;
+import com.interteam.interpet.api.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends CrudRepository<UserDto, Integer> {
-    @Query("SELECT t FROM Thing t WHERE t.fooIn = ?1 AND t.bar = ?2")
-    static UserDto find(String email) //todo
-    {
-        return null;
-    }
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    @Query(value = "SELECT COUNT (u.user_id) FROM users u WHERE u.email=:email",
+            nativeQuery = true)
+    int checkIfMailExists(@Param("email") String email);
+
+    @Query(value = "SELECT DISTINCT u FROM User u WHERE u.email=:email")
+    User getUserByEmail(@Param("email") String email);
+
+//    @Query(value = "SELECT COUNT (u.user_id) FROM users u", nativeQuery = true)
+//    int amountOfRows();
 }
