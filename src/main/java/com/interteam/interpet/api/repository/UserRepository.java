@@ -1,21 +1,21 @@
 package com.interteam.interpet.api.repository;
 
-import com.interteam.interpet.api.config.Encoder;
-import com.interteam.interpet.api.model.MUser;
+import com.interteam.interpet.api.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-public class UserRepository {
-    public MUser find(String email) {
-        //TODO database connection
-        return null;
-    }
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    public String getPassword(String email) {
-        //TODO database connection
-        return "";
-    }
+    @Query(value = "SELECT COUNT (u.user_id) FROM users u WHERE u.email=:email",
+            nativeQuery = true)
+    int checkIfMailExists(@Param("email") String email);
 
-    public void register(String email, String password, String name, String surname, String city) {
-        String hash = new Encoder().encode(password);
-        //TODO database connection
-    }
+    @Query(value = "SELECT DISTINCT u FROM User u WHERE u.email=:email")
+    User getUserByEmail(@Param("email") String email);
+
+//    @Query(value = "SELECT COUNT (u.user_id) FROM users u", nativeQuery = true)
+//    int amountOfRows();
 }
