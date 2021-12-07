@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "offer")
-public class OfferDto {
+public class Offer {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -20,8 +20,6 @@ public class OfferDto {
     private int id;
     @Column(name = "userid")
     private int userId;
-    @Column(name = "animalid")
-    private int animalId;
     @Column(name = "price")
     private float price;
     @Column(name = "startdate")
@@ -30,7 +28,11 @@ public class OfferDto {
     private String endDate;
     @Column(name = "text")
     private String text;
+    @Column(name = "creationdate")
+    private String creationDate;
+    @OneToMany(targetEntity = Animal.class, mappedBy = "offer")
+    private Set<Animal> animals;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @OneToMany(targetEntity = ApplicationDto.class, mappedBy = "offerId")
-    private Set<ApplicationDto> applications;
+    @OneToMany(targetEntity = Application.class, mappedBy = "offer")
+    private Set<Application> applications;
 }
