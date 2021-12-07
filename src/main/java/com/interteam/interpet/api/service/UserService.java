@@ -1,8 +1,6 @@
 package com.interteam.interpet.api.service;
 
 import com.interteam.interpet.api.controller.auth.TokenTransfer;
-import com.interteam.interpet.api.controller.user.UserDto;
-import com.interteam.interpet.api.controller.user.UserMapper;
 import com.interteam.interpet.api.model.City;
 import com.interteam.interpet.api.model.Role;
 import com.interteam.interpet.api.model.User;
@@ -101,12 +99,9 @@ public class UserService {
             throw new IllegalStateException("Taki użytkownik nie istnieje w bazie.");
         }
 
-        UserMapper userMapper = new UserMapper();
-        UserDto userDto = userMapper.map(user);
-
         verifyPassword(password, user.getPassword());
         String token = jwtService.sign(user.getEmail(), user.getRole().getName());
-        return new TokenTransfer(token, userDto);
+        return new TokenTransfer(token, user);
     }
 
     public Boolean verifyPassword(String password, String hash) {

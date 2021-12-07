@@ -1,6 +1,6 @@
 package com.interteam.interpet.api.controller.auth;
 
-import com.interteam.interpet.api.controller.user.UserDto;
+import com.interteam.interpet.api.model.User;
 import lombok.*;
 
 @Builder
@@ -11,5 +11,5 @@ import lombok.*;
 @Getter
 public class TokenTransfer {
     private String token;
-    private UserDto userDto;
+    private User user;
 }

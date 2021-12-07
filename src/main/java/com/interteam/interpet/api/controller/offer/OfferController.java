@@ -20,23 +20,23 @@ class OfferController {
     private OfferRepository offerRepository;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> addOffer(@RequestBody OfferDto offerDto) {
+    ResponseEntity<Void> addOffer(@RequestBody Offer offer) {
         boolean validOfferRequest = true;
         if (!validOfferRequest) {
             return ResponseEntity.badRequest().build();
         }
-        offerRepository.save(offerDto);
+        offerRepository.save(offer);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    ResponseEntity<Iterable<OfferDto>> getOffers() {
+    ResponseEntity<Iterable<Offer>> getOffers() {
         return ResponseEntity.ok(offerRepository.findAll());
     }
 
     @GetMapping("/{offerId}")
-    ResponseEntity<OfferDto> getOffer(@PathVariable("offerId") Integer offerId) {
-        Optional<OfferDto> offer = offerRepository.findById(offerId);
+    ResponseEntity<Offer> getOffer(@PathVariable("offerId") Integer offerId) {
+        Optional<Offer> offer = offerRepository.findById(offerId);
         return offer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -51,13 +51,13 @@ class OfferController {
     }
 
     @GetMapping("/{offerId}/applications")
-    ResponseEntity<Void> getApplications(@RequestBody ApplicationDto applicationDto) {
+    ResponseEntity<Void> getApplications(@RequestBody Application application) {
         return ResponseEntity.badRequest()
                 .build();
     }
 
     @PostMapping("/{offerId}/applications")
-    ResponseEntity<ApplicationDto> addApplication(@RequestBody ApplicationDto applicationDto) {
+    ResponseEntity<Application> addApplication(@RequestBody Application application) {
         return ResponseEntity.badRequest()
                 .build();
     }
