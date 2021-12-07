@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 class UserController {
     @GetMapping("/{userId}")
-    ResponseEntity<UserDto> getUser() {
+    ResponseEntity<String> getUser() {
         System.out.println("Oh hi mark");
-        return ResponseEntity.badRequest()
-                .build();
+        return ResponseEntity.ok("Apyr");
     }
 
     @PatchMapping("/{userId}")
-    ResponseEntity<Void> editUser(@RequestBody UserDto userDto) {
+    ResponseEntity<Void> editUser(@RequestBody Void userDto) {
         return ResponseEntity.badRequest()
                 .build();
     }
