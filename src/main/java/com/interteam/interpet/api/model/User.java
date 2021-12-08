@@ -1,5 +1,6 @@
 package com.interteam.interpet.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -27,13 +28,15 @@ public class User {
     private String email;
     private String password;
     private String phone;
-
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "id_city")
     private City city;
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "id_role")
     private Role role;
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Rate> rates;
 
