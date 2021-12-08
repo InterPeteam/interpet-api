@@ -16,14 +16,17 @@ import javax.persistence.*;
 public class Application {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     @Column(name = "userid")
     private int userId;
+
     @Column(name = "accepted")
     private boolean accepted;
+
     @JsonIgnore
     @ManyToOne(targetEntity = Offer.class)
-    @JoinColumn(name="offerid", referencedColumnName = "id")
+    @JoinColumn(name = "offerid", referencedColumnName = "id")
     private Offer offer;
 }
