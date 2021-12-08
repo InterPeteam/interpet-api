@@ -3,6 +3,8 @@ package com.interteam.interpet.api.controller.offer;
 
 import com.interteam.interpet.api.repository.ApplicationRepository;
 import com.interteam.interpet.api.repository.OfferRepository;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -25,6 +27,8 @@ class OfferController {
     @Autowired
     private ApplicationRepository applicationRepository;
 
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
+    @CrossOrigin(origins = "*")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> addOffer(@RequestBody Offer offer) {
         boolean validOfferRequest = true;
@@ -35,17 +39,23 @@ class OfferController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
+    @CrossOrigin(origins = "*")
     @GetMapping
     ResponseEntity<Iterable<Offer>> getOffers() {
         return ResponseEntity.ok(offerRepository.findAll());
     }
 
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
+    @CrossOrigin(origins = "*")
     @GetMapping("/{offerId}")
     ResponseEntity<Offer> getOffer(@PathVariable("offerId") Integer offerId) {
         Optional<Offer> offer = offerRepository.findById(offerId);
         return offer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{offerId}")
     ResponseEntity<Void> deleteOffer(@PathVariable("offerId") Integer offerId) {
         try{
@@ -56,6 +66,8 @@ class OfferController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
+    @CrossOrigin(origins = "*")
     @GetMapping("/{offerId}/applications")
     ResponseEntity<List<Application>> getApplications(@PathVariable("offerId") Integer offerId) {
         List<Application> applicationResults = applicationRepository.findByOfferId(offerId);
@@ -63,6 +75,8 @@ class OfferController {
                 ResponseEntity.ok(applicationResults);
     }
 
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
+    @CrossOrigin(origins = "*")
     @PostMapping("/{offerId}/applications")
     ResponseEntity<Application> addApplication(@RequestBody Application application,
                                                @PathVariable("offerId") Integer offerId) {
@@ -80,6 +94,8 @@ class OfferController {
         return ResponseEntity.notFound().build();
     }
 
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
+    @CrossOrigin(origins = "*")
     @PostMapping("applications/{applicationId}/accept")
     ResponseEntity<Void> acceptApplication(@RequestBody boolean accepted,
                                            @PathVariable("applicationId") Integer applicationId) {
