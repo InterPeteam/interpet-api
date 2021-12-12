@@ -16,7 +16,8 @@ import javax.persistence.*;
 public class Animal {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @SequenceGenerator(name="animal-seq-gen",sequenceName="ANIMAL_SEQ", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.AUTO, generator="animal-seq-gen")
     private int id;
     @Column(name = "type")
     private String type;
