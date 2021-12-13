@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ApplicationRepository extends CrudRepository<Application, Integer> {
-    List<Application> findByOfferId(Integer userId);
+    List<Application> findByOfferId(Integer offerId);
 }

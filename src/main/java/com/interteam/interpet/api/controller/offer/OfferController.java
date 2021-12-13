@@ -1,6 +1,7 @@
 package com.interteam.interpet.api.controller.offer;
 
 
+import com.interteam.interpet.api.repository.AnimalRepository;
 import com.interteam.interpet.api.repository.ApplicationRepository;
 import com.interteam.interpet.api.repository.OfferRepository;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +25,8 @@ import java.util.Optional;
 class OfferController {
     @Autowired
     private OfferRepository offerRepository;
-
+    @Autowired
+    private AnimalRepository animalRepository;
     @Autowired
     private ApplicationRepository applicationRepository;
 
@@ -36,6 +39,10 @@ class OfferController {
             return ResponseEntity.badRequest().build();
         }
         offerRepository.save(offer);
+        for(Animal animal: offer.getAnimals()) {
+            animal.setOffer(offer);
+            animalRepository.save(animal);
+        }
         return ResponseEntity.ok().build();
     }
 
@@ -43,7 +50,7 @@ class OfferController {
     @CrossOrigin(origins = "*")
     @GetMapping
     ResponseEntity<Iterable<Offer>> getOffers() {
-        return ResponseEntity.ok(offerRepository.findAll());
+        return ResponseEntity.ok(offerRepository.findByEndDateGreaterThan(new Date()));
     }
 
     @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
@@ -56,13 +63,26 @@ class OfferController {
 
     @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
     @CrossOrigin(origins = "*")
+    @GetMapping("/user/{userId}")
+    ResponseEntity<Iterable<Offer>> getOfferByUserId(@PathVariable("userId") Integer userId) {
+        return ResponseEntity.ok(offerRepository.findByUserId(userId));
+    }
+
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{offerId}")
     ResponseEntity<Void> deleteOffer(@PathVariable("offerId") Integer offerId) {
-        try{
+        Optional<Offer> offer = offerRepository.findById(offerId);
+        if (offer.isPresent()) {
+            for(Animal animal: offer.get().getAnimals()) {
+                animalRepository.deleteById(animal.getId());
+            }
+            for(Application app: offer.get().getApplications()){
+                applicationRepository.deleteById(app.getId());
+            }
             offerRepository.deleteById(offerId);
-        }catch (EmptyResultDataAccessException ex) {
-            return ResponseEntity.notFound().build();
-        }
+        } else return ResponseEntity.notFound().build();
+
         return ResponseEntity.ok().build();
     }
 
@@ -70,9 +90,7 @@ class OfferController {
     @CrossOrigin(origins = "*")
     @GetMapping("/{offerId}/applications")
     ResponseEntity<List<Application>> getApplications(@PathVariable("offerId") Integer offerId) {
-        List<Application> applicationResults = applicationRepository.findByOfferId(offerId);
-        return applicationResults.isEmpty() ? ResponseEntity.notFound().build() :
-                ResponseEntity.ok(applicationResults);
+        return ResponseEntity.ok(applicationRepository.findByOfferId(offerId));
     }
 
     @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})

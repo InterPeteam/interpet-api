@@ -16,7 +16,8 @@ import javax.persistence.*;
 public class Application {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name="app-seq-gen",sequenceName="APP_SEQ", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.AUTO, generator="app-seq-gen")
     private int id;
 
     @Column(name = "userid")
