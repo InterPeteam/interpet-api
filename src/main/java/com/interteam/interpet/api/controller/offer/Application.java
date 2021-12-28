@@ -2,11 +2,13 @@ package com.interteam.interpet.api.controller.offer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.interteam.interpet.api.model.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @RequiredArgsConstructor
 @Getter
@@ -20,8 +22,9 @@ public class Application {
     @GeneratedValue(strategy= GenerationType.AUTO, generator="app-seq-gen")
     private int id;
 
-    @Column(name = "userid")
-    private int userId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userid", referencedColumnName = "user_id")
+    private User user;
 
     @Column(name = "accepted")
     private boolean accepted;
@@ -30,4 +33,8 @@ public class Application {
     @ManyToOne(targetEntity = Offer.class)
     @JoinColumn(name = "offerid", referencedColumnName = "id")
     private Offer offer;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "creationdate")
+    private Date creationDate;
 }
