@@ -1,9 +1,11 @@
 package com.interteam.interpet.api.controller.offer;
 
 
+import com.interteam.interpet.api.model.User;
 import com.interteam.interpet.api.repository.AnimalRepository;
 import com.interteam.interpet.api.repository.ApplicationRepository;
 import com.interteam.interpet.api.repository.OfferRepository;
+import com.interteam.interpet.api.repository.UserRepository;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 // TODO: implement mappers & potential validators in endpoints
 
@@ -29,6 +33,8 @@ class OfferController {
     private AnimalRepository animalRepository;
     @Autowired
     private ApplicationRepository applicationRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
     @CrossOrigin(origins = "*")
@@ -49,8 +55,12 @@ class OfferController {
     @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
     @CrossOrigin(origins = "*")
     @GetMapping
-    ResponseEntity<Iterable<Offer>> getOffers() {
-        return ResponseEntity.ok(offerRepository.findByEndDateGreaterThan(new Date()));
+    ResponseEntity<Iterable<Offer>> getOffers(Authentication authentication) {
+        User user = userRepository.getUserByEmail((String) authentication.getPrincipal());
+        return ResponseEntity.ok(
+            offerRepository.findByEndDateGreaterThan(new Date()).stream()
+                .filter(o -> o.getUserId() != user.getId()).collect(Collectors.toList())
+        );
     }
 
     @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
@@ -59,6 +69,33 @@ class OfferController {
     ResponseEntity<Offer> getOffer(@PathVariable("offerId") Integer offerId) {
         Optional<Offer> offer = offerRepository.findById(offerId);
         return offer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
+    @CrossOrigin(origins = "*")
+    @PutMapping(value = "/{offerId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> editOffer(@PathVariable("offerId") Integer offerId, @RequestBody Offer offer) {
+        Optional<Offer> offerDB = offerRepository.findById(offerId);
+        if (offerDB.isPresent()) {
+            offer.setId(offerId);
+            offerRepository.save(offer);
+            return ResponseEntity.ok().build();
+        } else return ResponseEntity.notFound().build();
+    }
+
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
+    @CrossOrigin(origins = "*")
+    @PutMapping(value = "/{offerId}/animal/{animalId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> editOffer(@PathVariable("offerId") Integer offerId, @PathVariable("animalId") Integer animalId,
+                                   @RequestBody Animal animal) {
+        Optional<Offer> offerDB = offerRepository.findById(offerId);
+        Optional<Animal> animalDB = animalRepository.findById(animalId);
+        if (offerDB.isPresent() && animalDB.isPresent()) {
+            animal.setId(animalId);
+            animal.setOffer(offerDB.get());
+            animalRepository.save(animal);
+            return ResponseEntity.ok().build();
+        } else return ResponseEntity.notFound().build();
     }
 
     @ApiOperation(value = "", authorizations = {@Authorization(value = "authkey")})
@@ -120,6 +157,7 @@ class OfferController {
         Optional<Application> applicationResult = applicationRepository.findById(applicationId);
         if (applicationResult.isPresent()) {
             applicationResult.get().setAccepted(accepted);
+            applicationRepository.save(applicationResult.get());
             return ResponseEntity.ok().build();
         }
 
