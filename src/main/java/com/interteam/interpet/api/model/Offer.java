@@ -1,6 +1,8 @@
-package com.interteam.interpet.api.controller.offer;
+package com.interteam.interpet.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.interteam.interpet.api.model.Animal;
+import com.interteam.interpet.api.model.Application;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

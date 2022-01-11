@@ -1,4 +1,4 @@
-package com.interteam.interpet.api.controller.offer;
+package com.interteam.interpet.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

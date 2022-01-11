@@ -1,6 +1,6 @@
 package com.interteam.interpet.api.repository;
 
-import com.interteam.interpet.api.controller.offer.Application;
+import com.interteam.interpet.api.model.Application;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

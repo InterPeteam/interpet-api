@@ -29,7 +29,7 @@ public class User {
     @JsonIgnore
     private String password;
     private String phone;
-    @JsonIgnore
+ //   @JsonIgnore
     @OneToOne
     @JoinColumn(name = "id_city")
     private City city;
@@ -40,6 +40,24 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Rate> rates;
+
+    public void addNewRate(Rate rate) {
+        rates.add(rate);
+    }
+
+    public void editUserMainSettings(String name, String surname, String phone) {
+        this.name = name;
+        this.surname = surname;
+        this.phone = phone;
+    }
+
+    public void editUserMail(String email) {
+        this.email = email;
+    }
+
+    public void editUserPassword(String password) {
+        this.password = password;
+    }
 
     public User() {}
 }
