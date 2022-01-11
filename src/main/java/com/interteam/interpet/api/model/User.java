@@ -29,7 +29,7 @@ public class User {
     @JsonIgnore
     private String password;
     private String phone;
-    @JsonIgnore
+ //   @JsonIgnore
     @OneToOne
     @JoinColumn(name = "id_city")
     private City city;
