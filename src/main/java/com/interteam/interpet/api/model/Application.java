@@ -21,7 +21,7 @@ public class Application {
     @GeneratedValue(strategy= GenerationType.AUTO, generator="app-seq-gen")
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "userid", referencedColumnName = "user_id")
     private User user;
 
