@@ -1,6 +1,9 @@
 package com.interteam.interpet.api.controller.offer;
 
 
+import com.interteam.interpet.api.model.Animal;
+import com.interteam.interpet.api.model.Application;
+import com.interteam.interpet.api.model.Offer;
 import com.interteam.interpet.api.model.User;
 import com.interteam.interpet.api.repository.AnimalRepository;
 import com.interteam.interpet.api.repository.ApplicationRepository;
@@ -10,7 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
