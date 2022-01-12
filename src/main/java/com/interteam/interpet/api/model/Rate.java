@@ -23,9 +23,9 @@ public class Rate {
     @JoinColumn(name = "id_user")
     private User user;
     private Long publisherId;
+    private Long offerId;
     private int rate;
     private String description;
 
-    public Rate() {
-    }
+    public Rate() {}
 }

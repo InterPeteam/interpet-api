@@ -12,8 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RateDto {
     private Long id;
-    private Long userId;
     private Long publisherId;
+    private Long offerId;
+    private Long userId;
     private int rate;
     private String description;
 }
