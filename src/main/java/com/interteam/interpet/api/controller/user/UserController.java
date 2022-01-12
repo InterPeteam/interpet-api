@@ -7,13 +7,12 @@ import com.interteam.interpet.api.repository.UserRepository;
 import com.interteam.interpet.api.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 
 @RestController
@@ -23,13 +22,17 @@ class UserController {
     private final UserRepository userRepository;
     private final UserService userService;
     private final RateRepository rateRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     public UserController(UserRepository userRepository,
                           UserService userService,
-                          RateRepository rateRepository) {
+                          RateRepository rateRepository,
+                          PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.rateRepository = rateRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -65,7 +68,7 @@ class UserController {
     @CrossOrigin(origins = "*")
     @PutMapping("/{userId}/email")
     ResponseEntity<Object> editUserMail(@PathVariable("userId") Long userId,
-                                      @RequestParam String email) {
+                                        @RequestParam String email) {
         Optional<User> user = userRepository.findById(userId);
 
         if (user.isPresent()) {
@@ -85,7 +88,7 @@ class UserController {
     @CrossOrigin(origins = "*")
     @PutMapping("/{userId}/password")
     ResponseEntity<Object> editUserPassword(@PathVariable("userId") Long userId,
-                                          @RequestParam String password) {
+                                            @RequestParam String password) {
 
         Optional<User> user = userRepository.findById(userId);
 
@@ -94,7 +97,7 @@ class UserController {
         }
 
         if (user.isPresent()) {
-            user.get().editUserPassword(password);
+            user.get().editUserPassword(passwordEncoder.encode(password));
             User modifyUser = userRepository.save(user.get());
             return ResponseEntity.ok(modifyUser);
         } else
