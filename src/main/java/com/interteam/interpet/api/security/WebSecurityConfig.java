@@ -30,6 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().authorizeRequests()
                 .antMatchers("/offers/**").hasAnyAuthority("ROLE_OWNER", "ROLE_PROTECTOR")
                 .antMatchers("/users/**").hasAnyAuthority("ROLE_OWNER", "ROLE_PROTECTOR")
+                .antMatchers("/rates/**").hasAnyAuthority("ROLE_OWNER", "ROLE_PROTECTOR")
+                .antMatchers("/cities").hasAnyAuthority("ROLE_OWNER", "ROLE_PROTECTOR")
                 .and().addFilter(new JwtFilter(authenticationManager()))
                 .csrf().disable();
     }

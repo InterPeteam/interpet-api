@@ -8,6 +8,7 @@ public class RateMapper {
         return RateDto.builder()
                 .id(rate.getId())
                 .publisherId(rate.getPublisherId())
+                .offerId(rate.getOfferId())
                 .userId(rate.getUser().getId())
                 .rate(rate.getRate())
                 .description(rate.getDescription())

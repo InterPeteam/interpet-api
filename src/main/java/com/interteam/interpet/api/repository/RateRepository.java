@@ -11,4 +11,7 @@ public interface RateRepository extends JpaRepository<Rate, Long> {
 
     @Query(value = "SELECT r FROM Rate r WHERE r.user.id=:id")
     List<Rate> findRatesByUserId(@Param("id") Long id);
+
+    @Query(value = "SELECT r FROM Rate r WHERE r.offerId=:id")
+    List<Rate> findRatesByOfferId(@Param("id") Long id);
 }
